@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand */
+  --color-primary: #58492c;
+  --color-brand-green: #2D5A3D;
+  --color-brand-gold: #C5A059;
+  --color-brand-gold-text: #846512;
+  --color-accent-gold: #B8960E;
+
+  /* Backgrounds */
+  --color-background-light: #f7f7f6;
+  --color-background-dark: #1c1a16;
+  --color-background-warm: #F2EDE4;
+  --color-neutral-beige: #efeeeb;
+
+  /* Text */
+  --color-text-muted: #827864;
+
+  /* Typography */
+  --font-display: var(--font-manrope), sans-serif;
+  --font-serif: var(--font-playfair), serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-manrope), sans-serif;
+}
+
+.backdrop-blur-nav {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.hero-gradient {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
+}
+
+/* Gallery hover effect */
+.gallery-card:hover .overlay {
+  opacity: 1;
+}
+
+.gallery-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Material symbols filled variant */
+.fill-1 {
+  font-variation-settings: "FILL" 1;
+}

@@ -1,0 +1,29 @@
+{
+  "name": "TVC Admin Dashboard",
+  "short_name": "TVC Admin",
+  "start_url": "/admin",
+  "scope": "/admin",
+  "display": "standalone",
+  "theme_color": "#1c1a16",
+  "background_color": "#1c1a16",
+  "icons": [
+    {
+      "src": "/icons/admin-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/admin-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/admin-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
