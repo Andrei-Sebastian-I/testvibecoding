@@ -190,27 +190,27 @@ export default function BalancePage() {
           <p className="text-sm mt-1">Try selecting a longer time range.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-primary/10 overflow-hidden">
-          <table className="w-full text-left">
+        <div className="bg-white rounded-xl border border-primary/10 overflow-x-auto">
+          <table className="w-full text-left min-w-0">
             <thead>
               <tr className="border-b border-primary/10 text-xs uppercase tracking-wider text-text-muted">
-                <th className="py-3 px-4 font-semibold">Date</th>
-                <th className="py-3 px-4 font-semibold w-full">Description</th>
-                <th className="py-3 px-4 font-semibold whitespace-nowrap">Type</th>
-                <th className="py-3 px-4 font-semibold text-right whitespace-nowrap">Amount</th>
+                <th className="py-3 px-3 sm:px-4 font-semibold">Date</th>
+                <th className="py-3 px-3 sm:px-4 font-semibold w-full">Description</th>
+                <th className="py-3 px-3 sm:px-4 font-semibold whitespace-nowrap hidden sm:table-cell">Type</th>
+                <th className="py-3 px-3 sm:px-4 font-semibold text-right whitespace-nowrap">Amount</th>
               </tr>
             </thead>
             <tbody>
               {transactions.map((t) => (
                 <tr key={t.id} className="border-b border-primary/5 hover:bg-primary/[0.02] transition-colors">
-                  <td className="py-3 px-4 text-sm text-text-muted whitespace-nowrap">
+                  <td className="py-3 px-3 sm:px-4 text-sm text-text-muted whitespace-nowrap">
                     {new Date(t.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                   </td>
-                  <td className="py-3 px-4">
+                  <td className="py-3 px-3 sm:px-4">
                     <p className="text-sm font-semibold text-primary">{t.description}</p>
                     <p className="text-xs text-text-muted">{t.detail}</p>
                   </td>
-                  <td className="py-3 px-4">
+                  <td className="py-3 px-3 sm:px-4 hidden sm:table-cell">
                     <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
                       t.type === "income"
                         ? "text-green-700 bg-green-50"
@@ -219,7 +219,7 @@ export default function BalancePage() {
                       {t.type === "income" ? "Sale" : "Expense"}
                     </span>
                   </td>
-                  <td className={`py-3 px-4 text-right text-sm font-semibold ${
+                  <td className={`py-3 px-3 sm:px-4 text-right text-sm font-semibold whitespace-nowrap ${
                     t.type === "income" ? "text-green-700" : "text-red-600"
                   }`}>
                     {t.type === "income" ? "+" : "-"}${t.amount.toLocaleString()}

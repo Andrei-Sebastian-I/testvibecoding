@@ -13,9 +13,9 @@ export default function HeroContent() {
   }, []);
 
   return (
-    <div className="relative z-10 text-center px-4 max-w-4xl">
+    <div className="relative z-10 text-center px-6 max-w-4xl">
       <h1
-        className="text-white text-6xl md:text-8xl font-light tracking-tight mb-6 transition-all duration-[1200ms] ease-out"
+        className="text-white text-4xl sm:text-6xl md:text-8xl font-light tracking-tight mb-6 transition-all duration-[1200ms] ease-out"
         style={{
           opacity: visible ? 1 : 0,
           transform: visible ? "translateY(0)" : "translateY(30px)",
@@ -32,7 +32,7 @@ export default function HeroContent() {
         }}
       />
       <p
-        className="text-white/90 text-xl md:text-2xl font-light mb-10 transition-all duration-[1400ms] ease-out"
+        className="text-white/90 text-base sm:text-xl md:text-2xl font-light mb-10 whitespace-nowrap transition-all duration-[1400ms] ease-out"
         style={{
           opacity: visible ? 1 : 0,
           letterSpacing: visible ? "0.05em" : "0.3em",
@@ -52,7 +52,7 @@ export default function HeroContent() {
       >
         <Link
           href="/products"
-          className="inline-block border-2 border-brand-gold text-brand-gold px-10 py-4 rounded-lg text-lg font-bold hover:bg-brand-gold hover:text-white transition-colors duration-300"
+          className="inline-block border-2 border-brand-gold text-brand-gold px-6 py-2.5 rounded-lg text-sm sm:px-10 sm:py-4 sm:text-lg font-bold hover:bg-brand-gold hover:text-white transition-colors duration-300"
         >
           Explore Collection
         </Link>

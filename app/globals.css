@@ -22,8 +22,12 @@
   --font-serif: var(--font-playfair), serif;
 }
 
-html {
-  scroll-behavior: smooth;
+/* Only enable smooth scroll on desktop — on mobile it can cause
+   fixed-position elements (navbar) to visually lag during scroll. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
@@ -46,6 +50,14 @@ body {
 
 .gallery-card:hover img {
   transform: scale(1.05);
+}
+
+/* Hide alt text and broken image icon while loading or on error */
+@layer base {
+  img {
+    color: transparent;
+    font-size: 0;
+  }
 }
 
 /* Material symbols filled variant */

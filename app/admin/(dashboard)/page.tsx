@@ -6,6 +6,7 @@ import type { Sale } from "@/lib/admin/sales-store";
 import type { Expense } from "@/lib/admin/expenses-store";
 import type { Product } from "@/lib/products";
 import type { StockEntry } from "@/lib/admin/stock-store";
+import SummaryCard from "@/components/admin/SummaryCard";
 import {
   AreaChart,
   Area,
@@ -197,13 +198,13 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* ── Charts Row 1: Revenue vs Expenses ── */}
-      <div className="bg-white rounded-xl border border-primary/10 p-5 mb-6">
+      <div className="bg-white rounded-xl border border-primary/10 p-4 sm:p-5 mb-6 overflow-hidden">
         <h3 className="text-sm font-bold text-primary uppercase tracking-wider mb-4">
           Monthly Revenue vs Expenses
         </h3>
-        <div className="h-72">
+        <div className="h-72 w-full min-w-0">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={monthlyData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
+            <AreaChart data={monthlyData} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
               <defs>
                 <linearGradient id="gradRevenue" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#16a34a" stopOpacity={0.2} />
@@ -247,21 +248,21 @@ export default function AdminDashboardPage() {
       {/* ── Charts Row 2: Top Products + Expenses by Category ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Top Products */}
-        <div className="bg-white rounded-xl border border-primary/10 p-5">
+        <div className="bg-white rounded-xl border border-primary/10 p-4 sm:p-5 overflow-hidden">
           <h3 className="text-sm font-bold text-primary uppercase tracking-wider mb-4">
             Top Products by Revenue
           </h3>
-          <div className="h-64">
+          <div className="h-64 w-full min-w-0">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={topProducts} layout="vertical" margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
+              <BarChart data={topProducts} layout="vertical" margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" horizontal={false} />
                 <XAxis type="number" tick={{ fontSize: 12 }} stroke="#9ca3af" tickFormatter={(v) => `$${v}`} />
                 <YAxis
                   type="category"
                   dataKey="name"
-                  tick={{ fontSize: 11 }}
+                  tick={{ fontSize: 10 }}
                   stroke="#9ca3af"
-                  width={110}
+                  width={90}
                 />
                 <Tooltip
                   formatter={(value: number | undefined) => [`$${(value ?? 0).toLocaleString()}`, "Revenue"]}
@@ -274,19 +275,19 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Expenses by Category */}
-        <div className="bg-white rounded-xl border border-primary/10 p-5">
+        <div className="bg-white rounded-xl border border-primary/10 p-4 sm:p-5 overflow-hidden">
           <h3 className="text-sm font-bold text-primary uppercase tracking-wider mb-4">
             Expenses by Category
           </h3>
-          <div className="h-64 flex items-center">
+          <div className="h-72 w-full min-w-0 flex items-center">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={expensesByCategory}
                   cx="50%"
                   cy="50%"
-                  innerRadius={55}
-                  outerRadius={90}
+                  innerRadius={45}
+                  outerRadius={75}
                   paddingAngle={3}
                   dataKey="value"
                   nameKey="name"
@@ -301,10 +302,10 @@ export default function AdminDashboardPage() {
                   contentStyle={{ borderRadius: "8px", border: "1px solid #e5e7eb", fontSize: "13px" }}
                 />
                 <Legend
-                  layout="vertical"
-                  align="right"
-                  verticalAlign="middle"
-                  wrapperStyle={{ fontSize: "12px" }}
+                  layout="horizontal"
+                  align="center"
+                  verticalAlign="bottom"
+                  wrapperStyle={{ fontSize: "11px" }}
                   formatter={(value: string) => <span className="text-primary/70">{value}</span>}
                 />
               </PieChart>
@@ -314,13 +315,13 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* ── Monthly Profit ── */}
-      <div className="bg-white rounded-xl border border-primary/10 p-5 mb-6">
+      <div className="bg-white rounded-xl border border-primary/10 p-4 sm:p-5 mb-6 overflow-hidden">
         <h3 className="text-sm font-bold text-primary uppercase tracking-wider mb-4">
           Monthly Profit
         </h3>
-        <div className="h-56">
+        <div className="h-56 w-full min-w-0">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={monthlyData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
+            <BarChart data={monthlyData} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis dataKey="month" tick={{ fontSize: 12 }} stroke="#9ca3af" />
               <YAxis tick={{ fontSize: 12 }} stroke="#9ca3af" tickFormatter={(v) => `$${v}`} />
@@ -354,9 +355,9 @@ export default function AdminDashboardPage() {
         <table className="w-full text-left">
           <thead>
             <tr className="border-b border-primary/10 text-xs uppercase tracking-wider text-text-muted">
-              <th className="py-3 px-5 font-semibold">Date</th>
-              <th className="py-3 px-5 font-semibold w-full">Description</th>
-              <th className="py-3 px-5 font-semibold text-right whitespace-nowrap">Amount</th>
+              <th className="py-3 px-3 sm:px-5 font-semibold">Date</th>
+              <th className="py-3 px-3 sm:px-5 font-semibold w-full">Description</th>
+              <th className="py-3 px-3 sm:px-5 font-semibold text-right whitespace-nowrap">Amount</th>
             </tr>
           </thead>
           <tbody>
@@ -365,13 +366,13 @@ export default function AdminDashboardPage() {
                 key={t.id}
                 className="border-b border-primary/5 last:border-b-0 hover:bg-primary/[0.02] transition-colors"
               >
-                <td className="py-3 px-5 text-sm text-text-muted whitespace-nowrap">
+                <td className="py-3 px-3 sm:px-5 text-sm text-text-muted whitespace-nowrap">
                   {new Date(t.date).toLocaleDateString("en-US", {
                     month: "short",
                     day: "numeric",
                   })}
                 </td>
-                <td className="py-3 px-5 text-sm font-semibold text-primary">
+                <td className="py-3 px-3 sm:px-5 text-sm font-semibold text-primary">
                   {t.description}
                 </td>
                 <td
@@ -386,40 +387,6 @@ export default function AdminDashboardPage() {
           </tbody>
         </table>
       </div>
-    </div>
-  );
-}
-
-/* ── Summary Card Component ── */
-function SummaryCard({
-  icon,
-  iconBg,
-  iconColor,
-  label,
-  value,
-  valueColor,
-  sub,
-}: {
-  icon: string;
-  iconBg: string;
-  iconColor: string;
-  label: string;
-  value: string;
-  valueColor: string;
-  sub?: string;
-}) {
-  return (
-    <div className="bg-white rounded-xl border border-primary/10 p-4">
-      <div className="flex items-center gap-3 mb-3">
-        <div className={`size-9 rounded-lg ${iconBg} flex items-center justify-center`}>
-          <span className={`material-symbols-outlined text-lg ${iconColor}`}>{icon}</span>
-        </div>
-        <p className="text-[11px] font-semibold text-text-muted uppercase tracking-wider">
-          {label}
-        </p>
-      </div>
-      <p className={`text-xl font-bold ${valueColor}`}>{value}</p>
-      {sub && <p className="text-xs text-text-muted mt-0.5">{sub}</p>}
     </div>
   );
 }

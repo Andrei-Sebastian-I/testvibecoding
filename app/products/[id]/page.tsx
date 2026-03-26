@@ -4,6 +4,7 @@ import { getProduct, getRelatedProducts, products } from "@/lib/products";
 import ProductCard from "@/components/ProductCard";
 import ProductImageGallery from "@/components/ProductImageGallery";
 import FavoriteButton from "@/components/FavoriteButton";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import type { Metadata } from "next";
 
 const SITE_URL =
@@ -128,7 +129,10 @@ export default async function ProductDetailPage({ params }: Props) {
               </div>
             </div>
 
-            <FavoriteButton productId={product.id} productName={product.name} productPrice={product.price} />
+            <div className="flex flex-col gap-3 pt-6">
+              <FavoriteButton productId={product.id} />
+              <WhatsAppButton productName={product.name} productPrice={product.price} />
+            </div>
           </div>
         </div>
 

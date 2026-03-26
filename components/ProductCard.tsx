@@ -33,7 +33,7 @@ export default function ProductCard({
   if (variant === "home") {
     return (
       <Link href={`/products/${id}`} className="group cursor-pointer">
-        <div className="relative overflow-hidden rounded-xl mb-6 aspect-[4/5] shadow-sm group-hover:shadow-xl transition-all duration-500 transform group-hover:-translate-y-2">
+        <div className="relative overflow-hidden rounded-xl mb-6 aspect-[4/5] shadow-sm group-hover:shadow-xl transition-all duration-500 transform group-hover:-translate-y-2 bg-primary/5">
           <Image
             src={image}
             alt={name}

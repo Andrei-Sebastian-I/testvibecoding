@@ -1,7 +1,16 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "mcp__chrome-devtools__navigate_page",
+      "mcp__chrome-devtools__take_screenshot",
+      "mcp__chrome-devtools__evaluate_script",
+      "mcp__chrome-devtools__take_snapshot",
+      "Bash(find /Users/andrei/Developer/Learn/testvibecoding/components/admin -type f -name *.tsx -o -name *.ts)",
+      "Bash(kill 41596)",
+      "Bash(npm run:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "mcp__chrome-devtools__click"
     ]
   }
 }

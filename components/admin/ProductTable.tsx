@@ -25,16 +25,16 @@ export default function ProductTable({ products, onEdit, onDelete }: ProductTabl
       <table className="w-full text-left">
         <thead>
           <tr className="border-b border-primary/10 text-xs uppercase tracking-wider text-text-muted">
-            <th className="py-3 px-4 font-semibold w-full">Product</th>
-            <th className="py-3 px-4 font-semibold whitespace-nowrap">Category</th>
-            <th className="py-3 px-4 font-semibold text-right whitespace-nowrap">Price</th>
-            <th className="py-3 px-4 font-semibold text-right whitespace-nowrap">Actions</th>
+            <th className="py-3 px-3 sm:px-4 font-semibold w-full">Product</th>
+            <th className="py-3 px-3 sm:px-4 font-semibold whitespace-nowrap hidden sm:table-cell">Category</th>
+            <th className="py-3 px-3 sm:px-4 font-semibold text-right whitespace-nowrap">Price</th>
+            <th className="py-3 px-3 sm:px-4 font-semibold text-right whitespace-nowrap">Actions</th>
           </tr>
         </thead>
         <tbody>
           {products.map((product) => (
             <tr key={product.id} className="border-b border-primary/5 hover:bg-primary/[0.02] transition-colors">
-              <td className="py-3 px-4">
+              <td className="py-3 px-3 sm:px-4">
                 <div className="flex items-center gap-3">
                   <div className="size-10 rounded-lg overflow-hidden bg-neutral-beige shrink-0 relative">
                     {product.image ? (
@@ -57,13 +57,13 @@ export default function ProductTable({ products, onEdit, onDelete }: ProductTabl
                   </div>
                 </div>
               </td>
-              <td className="py-3 px-4">
+              <td className="py-3 px-3 sm:px-4 hidden sm:table-cell">
                 <span className="text-xs font-medium bg-primary/5 text-primary px-2 py-1 rounded-md">
                   {product.category}
                 </span>
               </td>
-              <td className="py-3 px-4 text-right text-sm font-semibold">${product.price}</td>
-              <td className="py-3 px-4 text-right">
+              <td className="py-3 px-3 sm:px-4 text-right text-sm font-semibold">${product.price}</td>
+              <td className="py-3 px-3 sm:px-4 text-right">
                 <div className="flex items-center justify-end gap-1">
                   <button
                     onClick={() => onEdit(product)}
