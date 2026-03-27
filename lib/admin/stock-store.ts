@@ -8,7 +8,6 @@ export interface StockEntry {
 }
 
 declare global {
-  // eslint-disable-next-line no-var
   var __adminStockStore: Map<number, number> | undefined;
 }
 

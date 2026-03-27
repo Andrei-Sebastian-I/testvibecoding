@@ -9,8 +9,8 @@ export interface Sale {
 }
 
 declare global {
-  // eslint-disable-next-line no-var
   var __adminSalesStore: Sale[] | undefined;
+  var __adminSalesNextId: number | undefined;
 }
 
 function getStore(): Sale[] {
@@ -62,8 +62,14 @@ function getStore(): Sale[] {
       { id: 32, productName: "Gold Leaf Mirror",      quantity: 1, unitPrice: 340, total: 340,  customer: "Sarah Hughes",     date: "2026-02-12" },
       { id: 33, productName: "Velvet Cushion Set",    quantity: 3, unitPrice: 120, total: 360,  customer: "Michael Chen",     date: "2026-02-15" },
     ];
+    globalThis.__adminSalesNextId = Math.max(...globalThis.__adminSalesStore.map((s) => s.id), 0) + 1;
   }
   return globalThis.__adminSalesStore;
+}
+
+function nextId(): number {
+  getStore();
+  return globalThis.__adminSalesNextId!++;
 }
 
 export function getAllSales(): Sale[] {
@@ -72,8 +78,7 @@ export function getAllSales(): Sale[] {
 
 export function createSale(data: Omit<Sale, "id" | "total">): Sale {
   const store = getStore();
-  const maxId = store.reduce((max, s) => Math.max(max, s.id), 0);
-  const sale: Sale = { ...data, id: maxId + 1, total: data.quantity * data.unitPrice };
+  const sale: Sale = { ...data, id: nextId(), total: data.quantity * data.unitPrice };
   store.push(sale);
   return structuredClone(sale);
 }

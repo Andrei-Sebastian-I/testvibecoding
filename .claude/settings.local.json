@@ -15,7 +15,10 @@
       "Bash(grep -r \"export default\\\\|export const\\\\|export interface\\\\|export function\\\\|export type\" /Users/andrei/Developer/Learn/testvibecoding --include=\"*.tsx\" --include=\"*.ts\" ! -path \"*/node_modules/*\" ! -path \"*/.next/*\")",
       "Bash(git mv:*)",
       "Bash(git rm:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "Bash(npx next:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

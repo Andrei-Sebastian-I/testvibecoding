@@ -148,7 +148,7 @@ export default function ProductForm({ initial, onSubmit, onCancel }: ProductForm
         </div>
         <div className="space-y-2">
           {additionalImages.map((url, i) => (
-            <div key={i} className="flex gap-2">
+            <div key={`img-${i}-${url}`} className="flex gap-2">
               <input
                 className={`${inputClass} flex-1`}
                 value={url}

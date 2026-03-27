@@ -1,23 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifySessionToken, COOKIE_NAME } from "@/lib/admin/auth";
+import { authenticate, unauthorized } from "@/lib/admin/auth";
 import { getAllStock, updateStockBulk } from "@/lib/admin/stock-store";
 
-function authenticate(request: NextRequest): boolean {
-  const token = request.cookies.get(COOKIE_NAME)?.value;
-  return !!token && verifySessionToken(token);
-}
-
 export async function GET(request: NextRequest) {
-  if (!authenticate(request)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  if (!authenticate(request)) return unauthorized();
   return NextResponse.json(getAllStock());
 }
 
 export async function PUT(request: NextRequest) {
-  if (!authenticate(request)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  if (!authenticate(request)) return unauthorized();
 
   const body = await request.json();
   const { updates } = body as {

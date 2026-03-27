@@ -1,15 +1,21 @@
 import { products as staticProducts, type Product } from "@/lib/products";
 
 declare global {
-  // eslint-disable-next-line no-var
   var __adminProductStore: Product[] | undefined;
+  var __adminProductNextId: number | undefined;
 }
 
 function getStore(): Product[] {
   if (!globalThis.__adminProductStore) {
     globalThis.__adminProductStore = structuredClone(staticProducts);
+    globalThis.__adminProductNextId = Math.max(...globalThis.__adminProductStore.map((p) => p.id), 0) + 1;
   }
   return globalThis.__adminProductStore;
+}
+
+function nextId(): number {
+  getStore();
+  return globalThis.__adminProductNextId!++;
 }
 
 export function getAllProducts(): Product[] {
@@ -25,8 +31,7 @@ export function createProduct(
   data: Omit<Product, "id">
 ): Product {
   const store = getStore();
-  const maxId = store.reduce((max, p) => Math.max(max, p.id), 0);
-  const product: Product = { ...data, id: maxId + 1 };
+  const product: Product = { ...data, id: nextId() };
   store.push(product);
   return structuredClone(product);
 }

@@ -1,9 +1,11 @@
+import { memo } from "react";
+
 interface WhatsAppButtonProps {
   productName: string;
   productPrice: number;
 }
 
-export default function WhatsAppButton({ productName, productPrice }: WhatsAppButtonProps) {
+export default memo(function WhatsAppButton({ productName, productPrice }: WhatsAppButtonProps) {
   const message = `Hi! I'm interested in buying *${productName}* ($${productPrice}) from TestVibeCoding. Could you help me place an order?`;
   const whatsappUrl = `https://wa.me/15551234567?text=${encodeURIComponent(message)}`;
 
@@ -20,4 +22,4 @@ export default function WhatsAppButton({ productName, productPrice }: WhatsAppBu
       Buy via WhatsApp
     </a>
   );
-}
+});

@@ -14,19 +14,24 @@ const navLinks = [
   { href: "/about", label: "About Us" },
 ];
 
+type OpenPanel = "none" | "fav" | "contact" | "mobile";
+
 export default function Navbar() {
   const pathname = usePathname();
   const isHome = pathname === "/";
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [favOpen, setFavOpen] = useState(false);
-  const [contactOpen, setContactOpen] = useState(false);
+  const [openPanel, setOpenPanel] = useState<OpenPanel>("none");
 
-  // Close all on route change
+  const mobileOpen = openPanel === "mobile";
+  const favOpen = openPanel === "fav";
+  const contactOpen = openPanel === "contact";
+
+  // Close all panels on route change — pathname is an external value from the
+  // router, so synchronising local UI state to it is a valid effect usage.
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
-    setFavOpen(false);
-    setContactOpen(false);
-    setMobileOpen(false);
+    setOpenPanel("none");
   }, [pathname]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
@@ -96,14 +101,14 @@ export default function Navbar() {
           <div className="flex gap-2">
             <FavoritesDropdown
               isOpen={favOpen}
-              onToggle={() => { setFavOpen(!favOpen); setContactOpen(false); }}
-              onClose={() => setFavOpen(false)}
+              onToggle={() => setOpenPanel(favOpen ? "none" : "fav")}
+              onClose={() => setOpenPanel("none")}
               isHome={isHome}
             />
             <ContactDropdown
               isOpen={contactOpen}
-              onToggle={() => { setContactOpen(!contactOpen); setFavOpen(false); }}
-              onClose={() => setContactOpen(false)}
+              onToggle={() => setOpenPanel(contactOpen ? "none" : "contact")}
+              onClose={() => setOpenPanel("none")}
               isHome={isHome}
             />
           </div>
@@ -112,7 +117,7 @@ export default function Navbar() {
           <button
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             className="md:hidden p-2"
-            onClick={() => setMobileOpen(!mobileOpen)}
+            onClick={() => setOpenPanel(mobileOpen ? "none" : "mobile")}
           >
             <span aria-hidden="true"
               className={`material-symbols-outlined ${
@@ -127,7 +132,7 @@ export default function Navbar() {
 
       <MobileMenu
         open={mobileOpen}
-        onClose={() => setMobileOpen(false)}
+        onClose={() => setOpenPanel("none")}
         pathname={pathname}
         isHome={isHome}
       />

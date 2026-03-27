@@ -1,12 +1,13 @@
 "use client";
 
+import { memo } from "react";
 import { useFavorites } from "@/context/favorites-context";
 
 interface FavoriteButtonProps {
   productId: number;
 }
 
-export default function FavoriteButton({ productId }: FavoriteButtonProps) {
+export default memo(function FavoriteButton({ productId }: FavoriteButtonProps) {
   const { toggle, isFavorite } = useFavorites();
   const favorited = isFavorite(productId);
 
@@ -25,4 +26,4 @@ export default function FavoriteButton({ productId }: FavoriteButtonProps) {
       {favorited ? "Remove from Favorites" : "Add to Favorites"}
     </button>
   );
-}
+});

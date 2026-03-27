@@ -1,22 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifySessionToken, COOKIE_NAME } from "@/lib/admin/auth";
+import { authenticate, unauthorized, type RouteContext } from "@/lib/admin/auth";
 import {
   getProductById,
   updateProduct,
   deleteProduct,
 } from "@/lib/admin/product-store";
 
-function authenticate(request: NextRequest): boolean {
-  const token = request.cookies.get(COOKIE_NAME)?.value;
-  return !!token && verifySessionToken(token);
-}
-
-type RouteContext = { params: Promise<{ id: string }> };
-
 export async function GET(request: NextRequest, context: RouteContext) {
-  if (!authenticate(request)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  if (!authenticate(request)) return unauthorized();
 
   const { id } = await context.params;
   const product = getProductById(Number(id));
@@ -28,9 +19,7 @@ export async function GET(request: NextRequest, context: RouteContext) {
 }
 
 export async function PUT(request: NextRequest, context: RouteContext) {
-  if (!authenticate(request)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  if (!authenticate(request)) return unauthorized();
 
   const { id } = await context.params;
   const body = await request.json();
@@ -44,9 +33,7 @@ export async function PUT(request: NextRequest, context: RouteContext) {
 }
 
 export async function DELETE(request: NextRequest, context: RouteContext) {
-  if (!authenticate(request)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  if (!authenticate(request)) return unauthorized();
 
   const { id } = await context.params;
   const deleted = deleteProduct(Number(id));

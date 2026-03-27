@@ -12,7 +12,6 @@ export interface SiteSettings {
 }
 
 declare global {
-  // eslint-disable-next-line no-var
   var __adminSettingsStore: SiteSettings | undefined;
 }
 

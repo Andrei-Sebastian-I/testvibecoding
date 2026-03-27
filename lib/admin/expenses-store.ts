@@ -7,8 +7,8 @@ export interface Expense {
 }
 
 declare global {
-  // eslint-disable-next-line no-var
   var __adminExpensesStore: Expense[] | undefined;
+  var __adminExpensesNextId: number | undefined;
 }
 
 function getStore(): Expense[] {
@@ -68,8 +68,14 @@ function getStore(): Expense[] {
       { id: 40, description: "Shipping supplies",               amount: 85,   category: "Shipping",   date: "2026-02-05" },
       { id: 41, description: "Photography session",             amount: 200,  category: "Marketing",  date: "2026-02-10" },
     ];
+    globalThis.__adminExpensesNextId = Math.max(...globalThis.__adminExpensesStore.map((e) => e.id), 0) + 1;
   }
   return globalThis.__adminExpensesStore;
+}
+
+function nextId(): number {
+  getStore();
+  return globalThis.__adminExpensesNextId!++;
 }
 
 export function getAllExpenses(): Expense[] {
@@ -78,8 +84,7 @@ export function getAllExpenses(): Expense[] {
 
 export function createExpense(data: Omit<Expense, "id">): Expense {
   const store = getStore();
-  const maxId = store.reduce((max, e) => Math.max(max, e.id), 0);
-  const expense: Expense = { ...data, id: maxId + 1 };
+  const expense: Expense = { ...data, id: nextId() };
   store.push(expense);
   return structuredClone(expense);
 }

@@ -8,8 +8,8 @@ export interface StoredTestimonial extends Testimonial {
 }
 
 declare global {
-  // eslint-disable-next-line no-var
   var __adminTestimonialsStore: StoredTestimonial[] | undefined;
+  var __adminTestimonialsNextId: number | undefined;
 }
 
 function getStore(): StoredTestimonial[] {
@@ -18,8 +18,14 @@ function getStore(): StoredTestimonial[] {
       ...structuredClone(t),
       id: i + 1,
     }));
+    globalThis.__adminTestimonialsNextId = globalThis.__adminTestimonialsStore.length + 1;
   }
   return globalThis.__adminTestimonialsStore;
+}
+
+function nextId(): number {
+  getStore();
+  return globalThis.__adminTestimonialsNextId!++;
 }
 
 export function getAllTestimonials(): StoredTestimonial[] {
@@ -35,8 +41,7 @@ export function createTestimonial(
   data: Omit<StoredTestimonial, "id">
 ): StoredTestimonial {
   const store = getStore();
-  const maxId = store.reduce((max, t) => Math.max(max, t.id), 0);
-  const testimonial: StoredTestimonial = { ...data, id: maxId + 1 };
+  const testimonial: StoredTestimonial = { ...data, id: nextId() };
   store.push(testimonial);
   return structuredClone(testimonial);
 }

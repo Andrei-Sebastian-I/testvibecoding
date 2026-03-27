@@ -29,7 +29,7 @@ export default function ProductImageGallery({
       <div className="grid grid-cols-3 gap-4">
         {images.map((img, i) => (
           <button
-            key={i}
+            key={img}
             onClick={() => setSelectedImage(i)}
             className={`relative aspect-square overflow-hidden rounded-lg border-2 transition-all ${
               selectedImage === i

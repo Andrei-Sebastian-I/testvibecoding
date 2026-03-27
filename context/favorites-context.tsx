@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 interface FavoritesContextValue {
   favorites: number[];
@@ -19,22 +19,21 @@ const FavoritesContext = createContext<FavoritesContextValue>({
 const STORAGE_KEY = "tvc_favorites";
 
 export function FavoritesProvider({ children }: { children: React.ReactNode }) {
-  const [favorites, setFavorites] = useState<number[]>([]);
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
+  const [favorites, setFavorites] = useState<number[]>(() => {
+    if (typeof window === "undefined") return [];
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) setFavorites(JSON.parse(stored));
-    } catch {}
-    setLoaded(true);
-  }, []);
-
-  useEffect(() => {
-    if (loaded) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+      if (!stored) return [];
+      const parsed: unknown = JSON.parse(stored);
+      if (!Array.isArray(parsed) || !parsed.every((v) => typeof v === "number")) return [];
+      return parsed;
+    } catch {
+      return [];
     }
-  }, [favorites, loaded]);
+  });
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+  }, [favorites]);
 
   const toggle = useCallback((id: number) => {
     setFavorites((prev) =>

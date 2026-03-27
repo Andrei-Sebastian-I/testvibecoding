@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useFavorites } from "@/context/favorites-context";
@@ -17,7 +17,10 @@ interface FavoritesDropdownProps {
 export default function FavoritesDropdown({ isOpen, onToggle, onClose, isHome }: FavoritesDropdownProps) {
   const ref = useRef<HTMLDivElement>(null);
   const { favorites, toggle, count } = useFavorites();
-  const favoriteProducts = products.filter((p) => favorites.includes(p.id));
+  const favoriteProducts = useMemo(() => {
+    const favSet = new Set(favorites);
+    return products.filter((p) => favSet.has(p.id));
+  }, [favorites]);
 
   useClickOutside(ref, onClose, isOpen);
 

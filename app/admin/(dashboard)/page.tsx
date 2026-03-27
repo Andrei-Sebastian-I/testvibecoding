@@ -38,21 +38,25 @@ const PIE_COLORS = ["#C8A962", "#1B3A2D", "#6B8F71", "#D4A853", "#A3C9A8", "#8B6
 export default function AdminDashboardPage() {
   const [sales, setSales] = useState<Sale[]>([]);
   const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [, setProducts] = useState<Product[]>([]);
   const [stock, setStock] = useState<StockEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/admin/sales").then((r) => r.json()),
-      fetch("/api/admin/expenses").then((r) => r.json()),
-      fetch("/api/admin/products").then((r) => r.json()),
-      fetch("/api/admin/stock").then((r) => r.json()),
+      fetch("/api/admin/sales").then((r) => { if (!r.ok) throw new Error("Failed to load sales"); return r.json(); }),
+      fetch("/api/admin/expenses").then((r) => { if (!r.ok) throw new Error("Failed to load expenses"); return r.json(); }),
+      fetch("/api/admin/products").then((r) => { if (!r.ok) throw new Error("Failed to load products"); return r.json(); }),
+      fetch("/api/admin/stock").then((r) => { if (!r.ok) throw new Error("Failed to load stock"); return r.json(); }),
     ]).then(([s, e, p, st]) => {
       setSales(s);
       setExpenses(e);
       setProducts(p);
       setStock(st);
+    }).catch((err: Error) => {
+      setError(err.message);
+    }).finally(() => {
       setLoading(false);
     });
   }, []);
@@ -141,6 +145,10 @@ export default function AdminDashboardPage() {
 
   if (loading) {
     return <div className="text-center py-16 text-text-muted">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-16 text-red-600">{error}</div>;
   }
 
   return (

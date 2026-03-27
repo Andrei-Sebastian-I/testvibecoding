@@ -1,14 +1,16 @@
 import { createHmac, timingSafeEqual } from "crypto";
-import { SESSION_MAX_AGE } from "./constants";
+import { NextRequest, NextResponse } from "next/server";
+import { SESSION_MAX_AGE, COOKIE_NAME } from "./constants";
 
 const SECRET = process.env.ADMIN_SESSION_SECRET ?? "dev-secret-change-me";
-const PASSWORD = process.env.ADMIN_PASSWORD ?? "admin123";
+const PASSWORD = process.env.ADMIN_PASSWORD;
 
 function sign(payload: string): string {
   return createHmac("sha256", SECRET).update(payload).digest("hex");
 }
 
 export function verifyPassword(input: string): boolean {
+  if (!PASSWORD) return false;
   const a = Buffer.from(input);
   const b = Buffer.from(PASSWORD);
   if (a.length !== b.length) return false;
@@ -38,4 +40,15 @@ export function verifySessionToken(token: string): boolean {
   return age < SESSION_MAX_AGE;
 }
 
-export { COOKIE_NAME } from "./constants";
+export { COOKIE_NAME };
+
+export type RouteContext = { params: Promise<{ id: string }> };
+
+export function authenticate(request: NextRequest): boolean {
+  const token = request.cookies.get(COOKIE_NAME)?.value;
+  return !!token && verifySessionToken(token);
+}
+
+export function unauthorized(): NextResponse {
+  return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+}
