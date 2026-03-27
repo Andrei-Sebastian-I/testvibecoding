@@ -2,8 +2,9 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { type Product } from "@/lib/products";
-import ProductTable from "@/components/admin/ProductTable";
-import ProductForm from "@/components/admin/ProductForm";
+import ProductTable from "@/components/admin/product-table";
+import ProductForm from "@/components/admin/product-form";
+import FeedbackToast from "@/components/admin/feedback-toast";
 
 type Mode = { type: "list" } | { type: "create" } | { type: "edit"; product: Product };
 
@@ -11,6 +12,8 @@ export default function AdminDashboardPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [mode, setMode] = useState<Mode>({ type: "list" });
   const [loading, setLoading] = useState(true);
+  const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
   const fetchProducts = useCallback(async () => {
     setLoading(true);
@@ -37,6 +40,9 @@ export default function AdminDashboardPage() {
     if (res.ok) {
       await fetchProducts();
       setMode({ type: "list" });
+      setFeedback({ type: "success", message: "Product created successfully" });
+    } else {
+      setFeedback({ type: "error", message: "Failed to create product" });
     }
   }
 
@@ -50,19 +56,25 @@ export default function AdminDashboardPage() {
     if (res.ok) {
       await fetchProducts();
       setMode({ type: "list" });
+      setFeedback({ type: "success", message: "Product updated successfully" });
+    } else {
+      setFeedback({ type: "error", message: "Failed to update product" });
     }
   }
 
   async function handleDelete(id: number) {
-    if (!confirm("Delete this product?")) return;
     const res = await fetch(`/api/admin/products/${id}`, { method: "DELETE" });
     if (res.ok) {
       await fetchProducts();
+      setFeedback({ type: "success", message: "Product deleted" });
+    } else {
+      setFeedback({ type: "error", message: "Failed to delete product" });
     }
   }
 
   return (
     <div>
+      <FeedbackToast feedback={feedback} onDismiss={() => setFeedback(null)} />
       {mode.type === "list" && (
         <>
           <div className="flex items-center justify-between mb-6">
@@ -76,7 +88,7 @@ export default function AdminDashboardPage() {
               onClick={() => setMode({ type: "create" })}
               className="flex items-center gap-2 bg-brand-gold text-white px-4 py-2.5 rounded-lg text-sm font-bold hover:bg-brand-gold/90 transition-all cursor-pointer"
             >
-              <span className="material-symbols-outlined text-lg">add</span>
+              <span aria-hidden="true" className="material-symbols-outlined text-lg">add</span>
               Add Product
             </button>
           </div>
@@ -89,6 +101,8 @@ export default function AdminDashboardPage() {
                 products={products}
                 onEdit={(p) => setMode({ type: "edit", product: p })}
                 onDelete={handleDelete}
+                deletingId={deletingId}
+                onRequestDelete={setDeletingId}
               />
             </div>
           )}

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { Metadata } from "next";
 import { galleryItems } from "@/lib/data/gallery-items";
+import NewsletterForm from "@/components/newsletter-form";
 
 export const metadata: Metadata = {
   title: "Gallery",
@@ -46,7 +47,7 @@ export default function GalleryPage() {
                 className="object-cover transition-transform duration-700 ease-out"
               />
               <div className="overlay absolute inset-0 bg-primary/80 opacity-0 transition-opacity duration-500 flex flex-col items-center justify-center p-6 text-center">
-                <span className="material-symbols-outlined text-white/50 mb-3 text-3xl">
+                <span aria-hidden="true" className="material-symbols-outlined text-white/50 mb-3 text-3xl">
                   {item.icon}
                 </span>
                 <h3 className="text-white text-xl font-bold uppercase tracking-widest">
@@ -67,21 +68,12 @@ export default function GalleryPage() {
             Join our newsletter for the latest interior design trends and
             exclusive project previews.
           </p>
-          <form className="flex flex-col sm:flex-row w-full max-w-lg gap-3">
-            <input
-              className="flex-1 rounded-lg border-none bg-white/10 text-white placeholder:text-white/40 focus:ring-2 focus:ring-accent-gold h-14 px-6 text-lg"
-              placeholder="Enter your email"
-              type="email"
-              required
-              aria-label="Enter your email"
-            />
-            <button
-              type="submit"
-              className="bg-accent-gold text-primary font-bold px-8 h-14 rounded-lg hover:bg-white transition-all text-lg"
-            >
-              Subscribe
-            </button>
-          </form>
+          <NewsletterForm
+            className="flex flex-col sm:flex-row w-full max-w-lg gap-3"
+            inputClassName="flex-1 rounded-lg border-none bg-white/10 text-white placeholder:text-white/40 focus:ring-2 focus:ring-accent-gold h-14 px-6 text-lg"
+            buttonClassName="bg-accent-gold text-primary font-bold px-8 h-14 rounded-lg hover:bg-white transition-all text-lg"
+            placeholder="Enter your email"
+          />
         </div>
       </section>
     </div>

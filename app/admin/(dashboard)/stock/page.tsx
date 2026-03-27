@@ -90,7 +90,7 @@ export default function StockPage() {
         <div className="flex items-center gap-3">
           {saved && (
             <span className="text-sm text-green-600 font-medium flex items-center gap-1">
-              <span className="material-symbols-outlined text-lg">
+              <span aria-hidden="true" className="material-symbols-outlined text-lg">
                 check_circle
               </span>
               Saved
@@ -101,7 +101,7 @@ export default function StockPage() {
             disabled={saving || edited.size === 0}
             className="flex items-center gap-2 bg-brand-gold text-white px-4 py-2.5 rounded-lg text-sm font-bold hover:bg-brand-gold/90 transition-all disabled:opacity-50 cursor-pointer"
           >
-            <span className="material-symbols-outlined text-lg">save</span>
+            <span aria-hidden="true" className="material-symbols-outlined text-lg">save</span>
             {saving ? "Saving..." : "Save Changes"}
           </button>
         </div>

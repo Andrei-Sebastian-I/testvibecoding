@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useCallback } from "react";
 import type { Expense } from "@/lib/admin/expenses-store";
-import ExpenseForm from "@/components/admin/ExpenseForm";
+import ExpenseForm from "@/components/admin/expense-form";
+import FeedbackToast from "@/components/admin/feedback-toast";
 
 type Mode = { type: "list" } | { type: "create" } | { type: "edit"; expense: Expense };
 
@@ -10,6 +11,8 @@ export default function ExpensesPage() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [mode, setMode] = useState<Mode>({ type: "list" });
   const [loading, setLoading] = useState(true);
+  const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
   const fetchExpenses = useCallback(async () => {
     setLoading(true);
@@ -26,9 +29,13 @@ export default function ExpensesPage() {
   }, [fetchExpenses]);
 
   async function handleDelete(id: number) {
-    if (!confirm("Delete this expense?")) return;
     const res = await fetch(`/api/admin/expenses/${id}`, { method: "DELETE" });
-    if (res.ok) await fetchExpenses();
+    if (res.ok) {
+      await fetchExpenses();
+      setFeedback({ type: "success", message: "Expense deleted" });
+    } else {
+      setFeedback({ type: "error", message: "Failed to delete expense" });
+    }
   }
 
   const total = expenses.reduce((sum, e) => sum + e.amount, 0);
@@ -40,6 +47,7 @@ export default function ExpensesPage() {
 
   return (
     <div>
+      <FeedbackToast feedback={feedback} onDismiss={() => setFeedback(null)} />
       {mode.type === "list" && (
         <>
           <div className="flex items-center justify-between mb-6">
@@ -53,7 +61,7 @@ export default function ExpensesPage() {
               onClick={() => setMode({ type: "create" })}
               className="flex items-center gap-2 bg-brand-gold text-white px-4 py-2.5 rounded-lg text-sm font-bold hover:bg-brand-gold/90 transition-all cursor-pointer"
             >
-              <span className="material-symbols-outlined text-lg">add</span>
+              <span aria-hidden="true" className="material-symbols-outlined text-lg">add</span>
               Add Expense
             </button>
           </div>
@@ -76,7 +84,7 @@ export default function ExpensesPage() {
             <div className="text-center py-16 text-text-muted">Loading...</div>
           ) : expenses.length === 0 ? (
             <div className="text-center py-16 text-text-muted">
-              <span className="material-symbols-outlined text-5xl mb-4 block">receipt_long</span>
+              <span aria-hidden="true" className="material-symbols-outlined text-5xl mb-4 block">receipt_long</span>
               <p className="text-lg font-medium">No expenses recorded</p>
             </div>
           ) : (
@@ -116,14 +124,31 @@ export default function ExpensesPage() {
                               onClick={() => setMode({ type: "edit", expense })}
                               className="p-1.5 rounded-md text-text-muted hover:text-primary hover:bg-primary/5 transition-colors cursor-pointer"
                             >
-                              <span className="material-symbols-outlined text-lg">edit</span>
+                              <span aria-hidden="true" className="material-symbols-outlined text-lg">edit</span>
                             </button>
-                            <button
-                              onClick={() => handleDelete(expense.id)}
-                              className="p-1.5 rounded-md text-text-muted hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
-                            >
-                              <span className="material-symbols-outlined text-lg">delete</span>
-                            </button>
+                            {deletingId === expense.id ? (
+                              <>
+                                <button
+                                  onClick={() => { handleDelete(expense.id); setDeletingId(null); }}
+                                  className="px-2 py-1 rounded-md text-xs font-semibold text-white bg-red-600 hover:bg-red-700 transition-colors cursor-pointer"
+                                >
+                                  Confirm
+                                </button>
+                                <button
+                                  onClick={() => setDeletingId(null)}
+                                  className="px-2 py-1 rounded-md text-xs font-semibold text-text-muted hover:text-primary transition-colors cursor-pointer"
+                                >
+                                  Cancel
+                                </button>
+                              </>
+                            ) : (
+                              <button
+                                onClick={() => setDeletingId(expense.id)}
+                                className="p-1.5 rounded-md text-text-muted hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                              >
+                                <span aria-hidden="true" className="material-symbols-outlined text-lg">delete</span>
+                              </button>
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -141,6 +166,7 @@ export default function ExpensesPage() {
           onSave={async () => {
             await fetchExpenses();
             setMode({ type: "list" });
+            setFeedback({ type: "success", message: mode.type === "create" ? "Expense added" : "Expense updated" });
           }}
           onCancel={() => setMode({ type: "list" })}
         />

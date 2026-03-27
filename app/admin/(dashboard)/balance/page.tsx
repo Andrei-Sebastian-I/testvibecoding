@@ -112,7 +112,7 @@ export default function BalancePage() {
         <div className="bg-white rounded-xl border border-primary/10 p-5">
           <div className="flex items-center gap-3 mb-3">
             <div className="size-10 rounded-lg bg-green-50 flex items-center justify-center">
-              <span className="material-symbols-outlined text-green-700">trending_up</span>
+              <span aria-hidden="true" className="material-symbols-outlined text-green-700">trending_up</span>
             </div>
             <p className="text-xs font-semibold text-text-muted uppercase tracking-wider">
               Revenue
@@ -129,7 +129,7 @@ export default function BalancePage() {
         <div className="bg-white rounded-xl border border-primary/10 p-5">
           <div className="flex items-center gap-3 mb-3">
             <div className="size-10 rounded-lg bg-red-50 flex items-center justify-center">
-              <span className="material-symbols-outlined text-red-600">trending_down</span>
+              <span aria-hidden="true" className="material-symbols-outlined text-red-600">trending_down</span>
             </div>
             <p className="text-xs font-semibold text-text-muted uppercase tracking-wider">
               Expenses
@@ -152,7 +152,7 @@ export default function BalancePage() {
             <div className={`size-10 rounded-lg flex items-center justify-center ${
               balance >= 0 ? "bg-green-100" : "bg-red-100"
             }`}>
-              <span className={`material-symbols-outlined ${
+              <span aria-hidden="true" className={`material-symbols-outlined ${
                 balance >= 0 ? "text-green-700" : "text-red-600"
               }`}>
                 account_balance
@@ -185,7 +185,7 @@ export default function BalancePage() {
 
       {transactions.length === 0 ? (
         <div className="text-center py-16 text-text-muted">
-          <span className="material-symbols-outlined text-5xl mb-4 block">receipt_long</span>
+          <span aria-hidden="true" className="material-symbols-outlined text-5xl mb-4 block">receipt_long</span>
           <p className="text-lg font-medium">No transactions in this period</p>
           <p className="text-sm mt-1">Try selecting a longer time range.</p>
         </div>

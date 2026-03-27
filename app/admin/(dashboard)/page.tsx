@@ -6,7 +6,7 @@ import type { Sale } from "@/lib/admin/sales-store";
 import type { Expense } from "@/lib/admin/expenses-store";
 import type { Product } from "@/lib/products";
 import type { StockEntry } from "@/lib/admin/stock-store";
-import SummaryCard from "@/components/admin/SummaryCard";
+import SummaryCard from "@/components/admin/summary-card";
 import {
   AreaChart,
   Area,
@@ -219,8 +219,7 @@ export default function AdminDashboardPage() {
               <XAxis dataKey="month" tick={{ fontSize: 12 }} stroke="#9ca3af" />
               <YAxis tick={{ fontSize: 12 }} stroke="#9ca3af" tickFormatter={(v) => `$${v}`} />
               <Tooltip
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                formatter={(value: any, name: any) => [`$${Number(value ?? 0).toLocaleString()}`, name]}
+                formatter={(value?: number | string) => `$${Number(value ?? 0).toLocaleString()}`}
                 contentStyle={{ borderRadius: "8px", border: "1px solid #e5e7eb", fontSize: "13px" }}
               />
               <Legend wrapperStyle={{ fontSize: "13px" }} />

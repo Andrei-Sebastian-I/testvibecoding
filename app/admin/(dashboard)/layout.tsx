@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import AdminSidebar from "@/components/admin/AdminSidebar";
-import AdminHeader from "@/components/admin/AdminHeader";
-import { useAdminSW } from "@/hooks/useAdminSW";
+import AdminSidebar from "@/components/admin/admin-sidebar";
+import AdminHeader from "@/components/admin/admin-header";
+import { useAdminSW } from "@/hooks/use-admin-sw";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);

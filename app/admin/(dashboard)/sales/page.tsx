@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useCallback } from "react";
 import type { Sale } from "@/lib/admin/sales-store";
-import SaleForm from "@/components/admin/SaleForm";
+import SaleForm from "@/components/admin/sale-form";
+import FeedbackToast from "@/components/admin/feedback-toast";
 
 type Mode = { type: "list" } | { type: "create" } | { type: "edit"; sale: Sale };
 
@@ -10,6 +11,8 @@ export default function SalesPage() {
   const [sales, setSales] = useState<Sale[]>([]);
   const [mode, setMode] = useState<Mode>({ type: "list" });
   const [loading, setLoading] = useState(true);
+  const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
   const fetchSales = useCallback(async () => {
     setLoading(true);
@@ -26,9 +29,13 @@ export default function SalesPage() {
   }, [fetchSales]);
 
   async function handleDelete(id: number) {
-    if (!confirm("Delete this sale?")) return;
     const res = await fetch(`/api/admin/sales/${id}`, { method: "DELETE" });
-    if (res.ok) await fetchSales();
+    if (res.ok) {
+      await fetchSales();
+      setFeedback({ type: "success", message: "Sale deleted" });
+    } else {
+      setFeedback({ type: "error", message: "Failed to delete sale" });
+    }
   }
 
   const totalRevenue = sales.reduce((sum, s) => sum + s.total, 0);
@@ -36,6 +43,7 @@ export default function SalesPage() {
 
   return (
     <div>
+      <FeedbackToast feedback={feedback} onDismiss={() => setFeedback(null)} />
       {mode.type === "list" && (
         <>
           <div className="flex items-center justify-between mb-6">
@@ -49,7 +57,7 @@ export default function SalesPage() {
               onClick={() => setMode({ type: "create" })}
               className="flex items-center gap-2 bg-brand-gold text-white px-4 py-2.5 rounded-lg text-sm font-bold hover:bg-brand-gold/90 transition-all cursor-pointer"
             >
-              <span className="material-symbols-outlined text-lg">add</span>
+              <span aria-hidden="true" className="material-symbols-outlined text-lg">add</span>
               Record Sale
             </button>
           </div>
@@ -70,7 +78,7 @@ export default function SalesPage() {
             <div className="text-center py-16 text-text-muted">Loading...</div>
           ) : sales.length === 0 ? (
             <div className="text-center py-16 text-text-muted">
-              <span className="material-symbols-outlined text-5xl mb-4 block">point_of_sale</span>
+              <span aria-hidden="true" className="material-symbols-outlined text-5xl mb-4 block">point_of_sale</span>
               <p className="text-lg font-medium">No sales recorded</p>
             </div>
           ) : (
@@ -109,14 +117,31 @@ export default function SalesPage() {
                               onClick={() => setMode({ type: "edit", sale })}
                               className="p-1.5 rounded-md text-text-muted hover:text-primary hover:bg-primary/5 transition-colors cursor-pointer"
                             >
-                              <span className="material-symbols-outlined text-lg">edit</span>
+                              <span aria-hidden="true" className="material-symbols-outlined text-lg">edit</span>
                             </button>
-                            <button
-                              onClick={() => handleDelete(sale.id)}
-                              className="p-1.5 rounded-md text-text-muted hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
-                            >
-                              <span className="material-symbols-outlined text-lg">delete</span>
-                            </button>
+                            {deletingId === sale.id ? (
+                              <>
+                                <button
+                                  onClick={() => { handleDelete(sale.id); setDeletingId(null); }}
+                                  className="px-2 py-1 rounded-md text-xs font-semibold text-white bg-red-600 hover:bg-red-700 transition-colors cursor-pointer"
+                                >
+                                  Confirm
+                                </button>
+                                <button
+                                  onClick={() => setDeletingId(null)}
+                                  className="px-2 py-1 rounded-md text-xs font-semibold text-text-muted hover:text-primary transition-colors cursor-pointer"
+                                >
+                                  Cancel
+                                </button>
+                              </>
+                            ) : (
+                              <button
+                                onClick={() => setDeletingId(sale.id)}
+                                className="p-1.5 rounded-md text-text-muted hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                              >
+                                <span aria-hidden="true" className="material-symbols-outlined text-lg">delete</span>
+                              </button>
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -134,6 +159,7 @@ export default function SalesPage() {
           onSave={async () => {
             await fetchSales();
             setMode({ type: "list" });
+            setFeedback({ type: "success", message: mode.type === "create" ? "Sale recorded" : "Sale updated" });
           }}
           onCancel={() => setMode({ type: "list" })}
         />

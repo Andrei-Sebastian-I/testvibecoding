@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getProduct, getRelatedProducts, products } from "@/lib/products";
-import ProductCard from "@/components/ProductCard";
-import ProductImageGallery from "@/components/ProductImageGallery";
-import FavoriteButton from "@/components/FavoriteButton";
-import WhatsAppButton from "@/components/WhatsAppButton";
+import ProductCard from "@/components/product-card";
+import ProductImageGallery from "@/components/product-image-gallery";
+import FavoriteButton from "@/components/favorite-button";
+import WhatsAppButton from "@/components/whatsapp-button";
 import type { Metadata } from "next";
 
 const SITE_URL =
@@ -21,7 +21,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const product = getProduct(Number(id));
-  if (!product) return {};
+  if (!product) return { title: "Product Not Found", robots: { index: false } };
   const description = product.description.slice(0, 160);
   return {
     title: product.name,
@@ -75,7 +75,7 @@ export default async function ProductDetailPage({ params }: Props) {
           href="/products"
           className="inline-flex items-center gap-1 mb-10 text-sm text-primary/80 hover:text-primary transition-colors"
         >
-          <span className="material-symbols-outlined text-lg">arrow_back</span>
+          <span aria-hidden="true" className="material-symbols-outlined text-lg">arrow_back</span>
           Back to Products
         </Link>
 

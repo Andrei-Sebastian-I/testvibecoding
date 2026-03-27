@@ -1,8 +1,8 @@
 import { createHmac, timingSafeEqual } from "crypto";
+import { SESSION_MAX_AGE } from "./constants";
 
 const SECRET = process.env.ADMIN_SESSION_SECRET ?? "dev-secret-change-me";
 const PASSWORD = process.env.ADMIN_PASSWORD ?? "admin123";
-const SESSION_MAX_AGE = 24 * 60 * 60 * 1000; // 24 hours
 
 function sign(payload: string): string {
   return createHmac("sha256", SECRET).update(payload).digest("hex");
@@ -38,4 +38,4 @@ export function verifySessionToken(token: string): boolean {
   return age < SESSION_MAX_AGE;
 }
 
-export const COOKIE_NAME = "admin_session";
+export { COOKIE_NAME } from "./constants";

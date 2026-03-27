@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Manrope, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import LayoutShell from "@/components/LayoutShell";
+import LayoutShell from "@/components/layout-shell";
 
 const manrope = Manrope({
   subsets: ["latin"],

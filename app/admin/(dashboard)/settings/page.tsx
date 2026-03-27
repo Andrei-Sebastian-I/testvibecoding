@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { SiteSettings } from "@/lib/admin/settings-store";
-
-const inputClass =
-  "w-full px-3 py-2 rounded-lg border border-primary/15 bg-white text-sm text-primary placeholder:text-text-muted/60 focus:outline-none focus:ring-2 focus:ring-brand-gold/40 focus:border-brand-gold transition-colors";
+import { inputClass } from "@/components/admin/form-styles";
 
 const fields: { key: keyof SiteSettings; label: string; placeholder: string }[] = [
   { key: "name", label: "Company Name", placeholder: "TestVibeCoding" },
@@ -94,7 +92,7 @@ export default function SettingsPage() {
             </button>
             {saved && (
               <span className="text-sm text-green-600 font-medium flex items-center gap-1">
-                <span className="material-symbols-outlined text-lg">check_circle</span>
+                <span aria-hidden="true" className="material-symbols-outlined text-lg">check_circle</span>
                 Saved
               </span>
             )}

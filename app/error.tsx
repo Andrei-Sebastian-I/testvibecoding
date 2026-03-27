@@ -8,7 +8,7 @@ export default function Error({
 }) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center">
-      <span className="material-symbols-outlined text-6xl text-primary/20 mb-4">
+      <span aria-hidden="true" className="material-symbols-outlined text-6xl text-primary/20 mb-4">
         error_outline
       </span>
       <h2 className="text-2xl md:text-3xl font-bold text-primary">
